@@ -1,4 +1,5 @@
 import pygame
+from pygame.locals import Rect
 from pieces import Rook, Knight, Bishop, Queen, King, Pawn
 
 WHITE = 0
@@ -10,10 +11,33 @@ class Square:
         self.pos = pos
         self.piece = piece
         self.isFull = isIt
-    
-    def show(self, win):
+        self.clicked = False
+        self.win = win
+
+        self.square = Rect(self.pos[0], self.pos[1], 80, 80)
+        self.surface = pygame.Surface((70,70))
+        self.surface.set_alpha(128)
+        self.surface.fill ((255,0,0))
+
+    def show(self):
         if self.piece:
-            win.blit(self.piece.img, self.pos)
+            self.win.blit(self.piece.img, self.pos)
+
+    def show_moves(self):
+        if self.isFull:
+            return self.piece.moves(self.pos, self.win)
+        return []
+
+        
+    def highlight(self):
+        self.win.blit(self.surface, (self.pos[0]+5,self.pos[1]+5))
+        return self.show_moves()
+
+    def squareClicked(self):
+        if self.square.collidepoint(pygame.mouse.get_pos()):
+            if pygame.mouse.get_pressed()[0]:
+                self.clicked = True
+    
 
 class Board:
 
@@ -55,7 +79,7 @@ class Board:
         self.A3 = Square((0,400), None, win, False)
         self.B3 = Square((80, 400), None, win, False)
         self.C3 = Square((160, 400), None, win, False)
-        self.D3 = Square((340, 400), None, win, False)
+        self.D3 = Square((240, 400), None, win, False)
         self.E3 = Square((320, 400), None, win, False)
         self.F3 = Square((400, 400), None, win, False)
         self.G3 = Square((480, 400), None, win, False)
@@ -64,7 +88,7 @@ class Board:
         self.A4 = Square((0,320), None, win, False)
         self.B4 = Square((80, 320), None, win, False)
         self.C4 = Square((160, 320), None, win, False)
-        self.D4 = Square((340, 320), None, win, False)
+        self.D4 = Square((240, 320), None, win, False)
         self.E4 = Square((320, 320), None, win, False)
         self.F4 = Square((400, 320), None, win, False)
         self.G4 = Square((480, 320), None, win, False)
@@ -73,7 +97,7 @@ class Board:
         self.A5 = Square((0,240), None, win, False)
         self.B5 = Square((80, 240), None, win, False)
         self.C5 = Square((160, 240), None, win, False)
-        self.D5 = Square((340, 240), None, win, False)
+        self.D5 = Square((240, 240), None, win, False)
         self.E5 = Square((320, 240), None, win, False)
         self.F5 = Square((400, 240), None, win, False)
         self.G5 = Square((480, 240), None, win, False)
@@ -82,11 +106,14 @@ class Board:
         self.A6 = Square((0,160), None, win, False)
         self.B6 = Square((80, 160), None, win, False)
         self.C6 = Square((160, 160), None, win, False)
-        self.D6 = Square((340, 160), None, win, False)
+        self.D6 = Square((240, 160), None, win, False)
         self.E6 = Square((320, 160), None, win, False)
         self.F6 = Square((400, 160), None, win, False)
         self.G6 = Square((480, 160), None, win, False)
         self.H6 = Square((560, 160), None, win, False)
+
+        self.clickedSquare = self.A1
+        self.pot_moves = []
     
     def getList(self):
         return [self.A1, self.A2, self.A3, self.A4, self.A5, self.A6, self.A7, self.A8,
