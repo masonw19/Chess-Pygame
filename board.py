@@ -90,7 +90,6 @@ class Square:
         else:
             board.turn = WHITE
             
-        print(3)
         self.release_highlight(board)
 
     def release_highlight(self, board):
@@ -115,14 +114,14 @@ class Board:
         self.F1 = Square((400,560), Bishop(WHITE), win, True)
         self.G1 = Square((480,560), Knight(WHITE), win, True)
         self.H1 = Square((560,560), Rook(WHITE), win, True)
-        self.A2 = Square((0,480), Pawn(WHITE), win, True)
-        self.B2 = Square((80,480), Pawn(WHITE), win, True)
-        self.C2 = Square((160,480), Pawn(WHITE), win, True)
-        self.D2 = Square((240,480), Pawn(WHITE), win, True)
-        self.E2 = Square((320,480), Pawn(WHITE), win, True)
-        self.F2 = Square((400,480), Pawn(WHITE), win, True)
-        self.G2 = Square((480,480), Pawn(WHITE), win, True)
-        self.H2 = Square((560,480), Pawn(WHITE), win, True)
+        self.A2 = Square((0,480), Pawn(WHITE,(0,480)), win, True)
+        self.B2 = Square((80,480), Pawn(WHITE,(80,480)), win, True)
+        self.C2 = Square((160,480), Pawn(WHITE,(160,480)), win, True)
+        self.D2 = Square((240,480), Pawn(WHITE,(240,480)), win, True)
+        self.E2 = Square((320,480), Pawn(WHITE,(320,480)), win, True)
+        self.F2 = Square((400,480), Pawn(WHITE,(400,480)), win, True)
+        self.G2 = Square((480,480), Pawn(WHITE,(480,480)), win, True)
+        self.H2 = Square((560,480), Pawn(WHITE,(560,480)), win, True)
 
         self.A8 = Square((0,0), Rook(BLACK), win, True)
         self.B8 = Square((80,0), Knight(BLACK), win, True)
@@ -132,14 +131,14 @@ class Board:
         self.F8 = Square((400,0), Bishop(BLACK), win, True)
         self.G8 = Square((480,0), Knight(BLACK), win, True)
         self.H8 = Square((560,0), Rook(BLACK), win, True)
-        self.A7 = Square((0,80), Pawn(BLACK), win, True)
-        self.B7 = Square((80,80), Pawn(BLACK), win, True)
-        self.C7 = Square((160,80), Pawn(BLACK), win, True)
-        self.D7 = Square((240,80), Pawn(BLACK), win, True)
-        self.E7 = Square((320,80), Pawn(BLACK), win, True)
-        self.F7 = Square((400,80), Pawn(BLACK), win, True)
-        self.G7 = Square((480,80), Pawn(BLACK), win, True)
-        self.H7 = Square((560,80), Pawn(BLACK), win, True)
+        self.A7 = Square((0,80), Pawn(BLACK,(0,80)), win, True)
+        self.B7 = Square((80,80), Pawn(BLACK,(80,80)), win, True)
+        self.C7 = Square((160,80), Pawn(BLACK,(160,80)), win, True)
+        self.D7 = Square((240,80), Pawn(BLACK,(240,80)), win, True)
+        self.E7 = Square((320,80), Pawn(BLACK,(320,80)), win, True)
+        self.F7 = Square((400,80), Pawn(BLACK,(400,80)), win, True)
+        self.G7 = Square((480,80), Pawn(BLACK,(480,80)), win, True)
+        self.H7 = Square((560,80), Pawn(BLACK,(560,80)), win, True)
 
         self.A3 = Square((0,400), None, win, False)
         self.B3 = Square((80, 400), None, win, False)

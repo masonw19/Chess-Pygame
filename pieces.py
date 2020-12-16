@@ -365,7 +365,7 @@ class King:
                          (pos[0]-80,pos[1]), (pos[0]-80,pos[1]-80)]
 
 class Pawn:
-    def __init__(self, col):
+    def __init__(self, col, pos):
         if col == 0:
             self.col = col
             self.img = Pawn_White
@@ -373,7 +373,7 @@ class Pawn:
             self.col = col
             self.img = Pawn_Black
 
-        self.first_move = True
+        self.init_pos = pos     # need this because first move can move forward 2 spaces
     
     def moves(self, pos, win, boardDict):
         
@@ -392,6 +392,7 @@ class Pawn:
                     boardDict[pos].highlightme = True
                     pot_moves.append(pos)
 
+        print(pot_moves)
         return pot_moves
     
     def update_all_moves(self, pos, boardDict):
@@ -399,20 +400,28 @@ class Pawn:
         self.all_moves = []         # list of all our moves
 
         if self.col == 0:
-            mypos = (pos[0], pos[1]-80)                                     # this is the forward move
+            if pos == self.init_pos:
+                mypos = [(pos[0], pos[1]-80), (pos[0], pos[1]-160)]  
+            else:
+                mypos = [(pos[0], pos[1]-80)]
             pot_moves = [(pos[0]+80, pos[1]-80), (pos[0]-80, pos[1]-80)]    # these are the diagonal moves
 
         else:
-            mypos = (pos[0], pos[1]+80)                                     # this is the forward move
+            if pos == self.init_pos:
+                mypos = [(pos[0], pos[1]+80), (pos[0], pos[1]+160)]                                     # this is the forward move
+            else:
+                mypos = [(pos[0], pos[1]+80)]            
             pot_moves = [(pos[0]+80, pos[1]+80), (pos[0]-80, pos[1]+80)]    # these are the diagonal moves
 
-        if mypos in boardDict:  # if the forward position exists in our boardDictionary, execute
-            if boardDict[mypos].piece == None:  # if there is no piece on our forward move then append the position to our moves
-                self.all_moves.append(mypos) 
+        for pos in mypos:
+            if pos in boardDict:  # if the forward position exists in our boardDictionary, execute
+                if boardDict[pos].piece != None:  # if there is no piece on our forward move then append the position to our moves
+                    break
+                else:
+                    self.all_moves.append(pos) 
 
         for pos in pot_moves:   # loop through our diagonal positions
             if pos in boardDict:    # if the position exists in our boardDictionary, execute
                 if boardDict[pos].piece != None:    # if there is no piece there, we cannot move there. dont append position
                     if boardDict[pos].piece.col != self.col:    # if the piece there is the opposite colour, append move
                         self.all_moves.append(pos)
-            

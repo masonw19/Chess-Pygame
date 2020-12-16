@@ -36,9 +36,8 @@ def main():
     clock = pygame.time.Clock()
     coords = None
     while run:
-        clock.tick(30)
-        #redrawGameWindow(board, coords)
-        #print(pygame.mouse.get_pressed()[0])
+        #clock.tick(30)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
