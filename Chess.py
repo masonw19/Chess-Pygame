@@ -11,7 +11,6 @@ bg = pygame.image.load('imgs/Chess_Board.png')
 
 test_img = pygame.image.load('imgs/Queen_White.png')
 
-
 def redrawGameWindow(board):
     win.blit(bg, (0, 0))
 

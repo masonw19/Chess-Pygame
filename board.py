@@ -29,28 +29,34 @@ class Square:
         if self.isFull:
             return self.piece.moves(self.pos, self.win, boardDict)
         return []
-        
+
+    # highlight the square   
     def highlight(self):
         if self.highlightme:
             self.win.blit(self.surface, (self.pos[0]+5,self.pos[1]+5))
 
+    # highlight potential move squares
     def highlight_pot_moves(self, board):
         for move in board.pot_moves:
             if board.dict[move].highlightme and not self.isFull:
                 self.win.blit(self.surface, (board.dict[move].pos[0]+5, board.dict[move].pos[1]+5))
 
+    # when we click a square we need to highlight the clicked square and then get info on potential moves
     def highlight_clicked(self, board):
         self.win.blit(self.surface, (self.pos[0]+5,self.pos[1]+5))
         
+        # if the square we clicked is the same as the previous, just keep the square highglighted
         if self.pos == board.clickedSquare.pos:
             board.pot_moves = self.show_moves(board.dict)
 
+        # if the square we clicked is a potential move square, we need to update our clicked square and move our piece
         elif self.pos in board.pot_moves:
             self.update_board(board)
             print(self.pos)
 
-            self.release_highlight(board)
+            self.release_highlight(board)   # release all old highlights
 
+        # else do ....
         else:
             board.clickedSquare.clicked = False
             board.clickedSquare.highlightme = False
@@ -62,6 +68,7 @@ class Square:
             board.clickedSquare.clicked = True
             board.clickedSquare.highlightme = True
 
+    # update the clicked square and move piece
     def update_board(self, board):
         self.piece = board.clickedSquare.piece 
         self.isFull = True         # set that the square is now full
