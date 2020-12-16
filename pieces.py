@@ -49,13 +49,53 @@ class Rook:
     def update_all_moves(self, pos, boardDict):
 
         self.all_moves = []
+        self.block_col = []
+        self.block_row = []
 
         # get all moves and put it in our list
-        for i in range(8):
-            self.all_moves.append((pos[0], pos[1]+i*80))
-            self.all_moves.append((pos[0], pos[1]-i*80))
-            self.all_moves.append((pos[0]+i*80, pos[1]))
-            self.all_moves.append((pos[0]-i*80, pos[1]))
+        for i in range(1,8):
+            if (pos[0], pos[1]+i*80) in boardDict:
+                if boardDict[(pos[0], pos[1]+i*80)].piece != None:
+                    if boardDict[(pos[0], pos[1]+i*80)].piece.col != self.col:
+                        self.all_moves.append((pos[0], pos[1]+i*80))
+                        break
+                    else:
+                        break
+                else:
+                    self.all_moves.append((pos[0], pos[1]+i*80))
+
+        for i in range(1,8):
+            if (pos[0], pos[1]-i*80) in boardDict:
+                if boardDict[(pos[0], pos[1]-i*80)].piece != None:
+                    if boardDict[(pos[0], pos[1]-i*80)].piece.col != self.col:
+                        self.all_moves.append((pos[0], pos[1]-i*80))
+                        break
+                    else:
+                        break
+                else:
+                    self.all_moves.append((pos[0], pos[1]-i*80))
+        
+        for i in range(1,8):
+            if (pos[0]+i*80, pos[1]) in boardDict:
+                if boardDict[(pos[0]+i*80, pos[1])].piece != None:
+                    if boardDict[(pos[0]+i*80, pos[1])].piece.col != self.col:
+                        self.all_moves.append((pos[0]+i*80, pos[1]))
+                        break
+                    else:
+                        break
+                else:
+                    self.all_moves.append((pos[0]+i*80, pos[1]))
+
+        for i in range(1,8):
+            if (pos[0]-i*80, pos[1]) in boardDict:
+                if boardDict[(pos[0]-i*80, pos[1])].piece != None:
+                    if boardDict[(pos[0]-i*80, pos[1])].piece.col != self.col:
+                        self.all_moves.append((pos[0]-i*80, pos[1]))
+                        break
+                    else:
+                        break
+                else:
+                    self.all_moves.append((pos[0]-i*80, pos[1]))
 
 class Knight:
     def __init__(self, col):
@@ -97,13 +137,9 @@ class Bishop:
         else:
             self.col = col
             self.img = Bishop_Black
-
-        self.surface = pygame.Surface((70,70))
-        self.surface.set_alpha(128)
-        self.surface.fill ((255,0,0))
     
     def moves(self, pos, win, boardDict):
-        self.update_all_moves(pos)
+        self.update_all_moves(pos, boardDict)
         
         pot_moves = []
 
@@ -121,16 +157,54 @@ class Bishop:
         return pot_moves
 
 
-    def update_all_moves(self, pos):
+    def update_all_moves(self, pos, boardDict):
 
         self.all_moves = []
 
         # get all moves and put it in our list
-        for i in range(8):
-            self.all_moves.append((pos[0]+i*80, pos[1]+i*80))
-            self.all_moves.append((pos[0]+i*80, pos[1]-i*80))
-            self.all_moves.append((pos[0]-i*80, pos[1]+i*80))
-            self.all_moves.append((pos[0]-i*80, pos[1]-i*80))
+        for i in range(1,8):
+            if (pos[0]+i*80, pos[1]+i*80) in boardDict:
+                if boardDict[(pos[0]+i*80, pos[1]+i*80)].piece != None:
+                    if boardDict[(pos[0]+i*80, pos[1]+i*80)].piece.col != self.col:
+                        self.all_moves.append((pos[0]+i*80, pos[1]+i*80))
+                        break
+                    else:
+                        break
+                else:
+                    self.all_moves.append((pos[0]+i*80, pos[1]+i*80))
+
+        for i in range(1,8):
+            if (pos[0]+i*80, pos[1]-i*80) in boardDict:
+                if boardDict[(pos[0]+i*80, pos[1]-i*80)].piece != None:
+                    if boardDict[(pos[0]+i*80, pos[1]-i*80)].piece.col != self.col:
+                        self.all_moves.append((pos[0]+i*80, pos[1]-i*80))
+                        break
+                    else:
+                        break
+                else:
+                    self.all_moves.append((pos[0]+i*80, pos[1]-i*80))
+        
+        for i in range(1,8):
+            if (pos[0]-i*80, pos[1]+i*80) in boardDict:
+                if boardDict[(pos[0]-i*80, pos[1]+i*80)].piece != None:
+                    if boardDict[(pos[0]-i*80, pos[1]+i*80)].piece.col != self.col:
+                        self.all_moves.append((pos[0]-i*80, pos[1]+i*80))
+                        break
+                    else:
+                        break
+                else:
+                    self.all_moves.append((pos[0]-i*80, pos[1]+i*80))
+
+        for i in range(1,8):
+            if (pos[0]-i*80, pos[1]-i*80) in boardDict:
+                if boardDict[(pos[0]-i*80, pos[1]-i*80)].piece != None:
+                    if boardDict[(pos[0]-i*80, pos[1]-i*80)].piece.col != self.col:
+                        self.all_moves.append((pos[0]-i*80, pos[1]-i*80))
+                        break
+                    else:
+                        break
+                else:
+                    self.all_moves.append((pos[0]-i*80, pos[1]-i*80))
             
 class Queen:
     def __init__(self, col):
@@ -146,7 +220,7 @@ class Queen:
         self.surface.fill ((255,0,0))
     
     def moves(self, pos, win, boardDict):
-        self.update_all_moves(pos)
+        self.update_all_moves(pos, boardDict)
         
         pot_moves = []
 
@@ -163,20 +237,98 @@ class Queen:
 
         return pot_moves
 
-    def update_all_moves(self, pos):
+    def update_all_moves(self, pos, boardDict):
 
         self.all_moves = []
 
         # get all moves and put it in our list
-        for i in range(8):
-            self.all_moves.append((pos[0]+i*80, pos[1]+i*80))
-            self.all_moves.append((pos[0]+i*80, pos[1]-i*80))
-            self.all_moves.append((pos[0]-i*80, pos[1]+i*80))
-            self.all_moves.append((pos[0]-i*80, pos[1]-i*80))
-            self.all_moves.append((pos[0], pos[1]+i*80))
-            self.all_moves.append((pos[0], pos[1]-i*80))
-            self.all_moves.append((pos[0]+i*80, pos[1]))
-            self.all_moves.append((pos[0]-i*80, pos[1]))
+        for i in range(1,8):
+            if (pos[0]+i*80, pos[1]+i*80) in boardDict:
+                if boardDict[(pos[0]+i*80, pos[1]+i*80)].piece != None:
+                    if boardDict[(pos[0]+i*80, pos[1]+i*80)].piece.col != self.col:
+                        self.all_moves.append((pos[0]+i*80, pos[1]+i*80))
+                        break
+                    else:
+                        break
+                else:
+                    self.all_moves.append((pos[0]+i*80, pos[1]+i*80))
+
+        for i in range(1,8):
+            if (pos[0]+i*80, pos[1]-i*80) in boardDict:
+                if boardDict[(pos[0]+i*80, pos[1]-i*80)].piece != None:
+                    if boardDict[(pos[0]+i*80, pos[1]-i*80)].piece.col != self.col:
+                        self.all_moves.append((pos[0]+i*80, pos[1]-i*80))
+                        break
+                    else:
+                        break
+                else:
+                    self.all_moves.append((pos[0]+i*80, pos[1]-i*80))
+        
+        for i in range(1,8):
+            if (pos[0]-i*80, pos[1]+i*80) in boardDict:
+                if boardDict[(pos[0]-i*80, pos[1]+i*80)].piece != None:
+                    if boardDict[(pos[0]-i*80, pos[1]+i*80)].piece.col != self.col:
+                        self.all_moves.append((pos[0]-i*80, pos[1]+i*80))
+                        break
+                    else:
+                        break
+                else:
+                    self.all_moves.append((pos[0]-i*80, pos[1]+i*80))
+
+        for i in range(1,8):
+            if (pos[0]-i*80, pos[1]-i*80) in boardDict:
+                if boardDict[(pos[0]-i*80, pos[1]-i*80)].piece != None:
+                    if boardDict[(pos[0]-i*80, pos[1]-i*80)].piece.col != self.col:
+                        self.all_moves.append((pos[0]-i*80, pos[1]-i*80))
+                        break
+                    else:
+                        break
+                else:
+                    self.all_moves.append((pos[0]-i*80, pos[1]-i*80))
+        
+        for i in range(1,8):
+            if (pos[0], pos[1]+i*80) in boardDict:
+                if boardDict[(pos[0], pos[1]+i*80)].piece != None:
+                    if boardDict[(pos[0], pos[1]+i*80)].piece.col != self.col:
+                        self.all_moves.append((pos[0], pos[1]+i*80))
+                        break
+                    else:
+                        break
+                else:
+                    self.all_moves.append((pos[0], pos[1]+i*80))
+
+        for i in range(1,8):
+            if (pos[0], pos[1]-i*80) in boardDict:
+                if boardDict[(pos[0], pos[1]-i*80)].piece != None:
+                    if boardDict[(pos[0], pos[1]-i*80)].piece.col != self.col:
+                        self.all_moves.append((pos[0], pos[1]-i*80))
+                        break
+                    else:
+                        break
+                else:
+                    self.all_moves.append((pos[0], pos[1]-i*80))
+        
+        for i in range(1,8):
+            if (pos[0]+i*80, pos[1]) in boardDict:
+                if boardDict[(pos[0]+i*80, pos[1])].piece != None:
+                    if boardDict[(pos[0]+i*80, pos[1])].piece.col != self.col:
+                        self.all_moves.append((pos[0]+i*80, pos[1]))
+                        break
+                    else:
+                        break
+                else:
+                    self.all_moves.append((pos[0]+i*80, pos[1]))
+
+        for i in range(1,8):
+            if (pos[0]-i*80, pos[1]) in boardDict:
+                if boardDict[(pos[0]-i*80, pos[1])].piece != None:
+                    if boardDict[(pos[0]-i*80, pos[1])].piece.col != self.col:
+                        self.all_moves.append((pos[0]-i*80, pos[1]))
+                        break
+                    else:
+                        break
+                else:
+                    self.all_moves.append((pos[0]-i*80, pos[1]))
 
 class King:
     def __init__(self, col):
