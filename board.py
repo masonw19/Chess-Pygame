@@ -34,6 +34,8 @@ class Square:
     def highlight(self):
         if self.highlightme:
             self.win.blit(self.surface, (self.pos[0]+5,self.pos[1]+5))
+        if self.clicked:
+            self.win.blit(self.surface, (self.pos[0]+5,self.pos[1]+5))
 
     # highlight potential move squares
     def highlight_pot_moves(self, board):
@@ -46,7 +48,7 @@ class Square:
         self.win.blit(self.surface, (self.pos[0]+5,self.pos[1]+5))
         
         # if the square we clicked is the same as the previous, just keep the square highglighted
-        if self.pos == board.clickedSquare.pos:
+        if self.pos == board.clickedSquares[board.turn].pos:
             board.pot_moves = self.show_moves(board.dict)
 
         # if the square we clicked is a potential move square, we need to update our clicked square and move our piece
@@ -58,36 +60,46 @@ class Square:
 
         # else do ....
         else:
-            board.clickedSquare.clicked = False
-            board.clickedSquare.highlightme = False
+            board.clickedSquares[board.turn].clicked = False
+            board.clickedSquares[board.turn].highlightme = False
 
             self.release_highlight(board)
 
             board.pot_moves = self.show_moves(board.dict)
-            board.clickedSquare = self
-            board.clickedSquare.clicked = True
-            board.clickedSquare.highlightme = True
+            board.clickedSquares[board.turn] = self
+            board.clickedSquares[board.turn].clicked = True
+            board.clickedSquares[board.turn].highlightme = True
 
     # update the clicked square and move piece
     def update_board(self, board):
-        self.piece = board.clickedSquare.piece 
+        self.piece = board.clickedSquares[board.turn].piece 
         self.isFull = True         # set that the square is now full
         self.clicked = False       # clicked is false
         
-        board.clickedSquare.piece = None
-        board.clickedSquare.clicked = False
-        board.clickedSquare.isFull = False
-        board.clickedSquare.highlightme = False
+        board.clickedSquares[board.turn].piece = None
+        board.clickedSquares[board.turn].clicked = False
+        board.clickedSquares[board.turn].isFull = False
+        board.clickedSquares[board.turn].highlightme = False
         
-        board.clickedSquare = self
+        board.clickedSquares[board.turn] = self
+        board.clickedSquares[board.turn].highlightme = False
+        board.clickedSquares[board.turn].clicked = False
+
+        if board.turn == WHITE:
+            board.turn = BLACK
+        else:
+            board.turn = WHITE
+            
+        print(3)
+        self.release_highlight(board)
 
     def release_highlight(self, board):
         for move in board.pot_moves:
             if move in board.dict:
                 board.dict[move].highlightme = False
 
-    def squareClicked(self):
-        if self.square.collidepoint(pygame.mouse.get_pos()):
+    def squareClicked(self, coords, board):
+        if self.square.collidepoint(coords) and ((self.piece == None) or (self.piece.col == board.turn) or (self.pos in board.pot_moves)):
             if pygame.mouse.get_pressed()[0]:
                 self.clicked = True
                 self.highlightme = True
@@ -165,9 +177,6 @@ class Board:
         self.G6 = Square((480, 160), None, win, False)
         self.H6 = Square((560, 160), None, win, False)
 
-        self.clickedSquare = self.A1
-        self.pot_moves = []
-
         self.dict = {(0,560):self.A1, (0,480):self.A2, (0,400):self.A3, (0,320):self.A4, (0,240):self.A5, (0,160):self.A6, (0,80):self.A7, (0,0):self.A8,
                 (80,560):self.B1, (80,480):self.B2, (80,400):self.B3, (80,320):self.B4, (80,240):self.B5, (80,160):self.B6, (80,80):self.B7, (80,0):self.B8,
                 (160,560):self.C1, (160,480):self.C2, (160,400):self.C3, (160,320):self.C4, (160,240):self.C5, (160,160):self.C6, (160,80):self.C7, (160,0):self.C8,
@@ -186,11 +195,14 @@ class Board:
                 self.F1, self.F2, self.F3, self.F4, self.F5, self.F6, self.F7, self.F8,
                 self.G1, self.G2, self.G3, self.G4, self.G5, self.G6, self.G7, self.G8,
                 self.H1, self.H2, self.H3, self.H4, self.H5, self.H6, self.H7, self.H8]
+        
+        self.clickedSquares = self.A1
+        self.clickedSquares = [self.A1, self.A8]
+        self.pot_moves = []
+        self.turn = WHITE
 
     def getList(self):
         return self.list
     
     def getDict(self):
         return self.dict
-
-        #print(dicti[(0, 560)].pos)

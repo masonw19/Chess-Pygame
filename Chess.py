@@ -11,17 +11,19 @@ bg = pygame.image.load('imgs/Chess_Board.png')
 
 test_img = pygame.image.load('imgs/Queen_White.png')
 
-def redrawGameWindow(board):
+def redrawGameWindow(board, coords):
     win.blit(bg, (0, 0))
 
     for i in board.list:
-
-        i.squareClicked()  # set the clicked attribute to be true if the square gets clicked
         
-        # highlight squares
-        if i.clicked:
-            i.highlight_clicked(board)  # highlights the clicked square
+        if coords != None:
+            i.squareClicked(coords, board)  # set the clicked attribute to be true if the square gets clicked
         
+            # highlight squares
+            if i.clicked:
+                i.highlight_clicked(board)  # highlights the clicked square
+                print("here")
+           
         i.highlight()                   # highlights all the potential moves
         i.show()                        # shows all the images
 
@@ -31,15 +33,23 @@ def redrawGameWindow(board):
 def main():
     run = True
     board = Board(win)
+    clock = pygame.time.Clock()
+    coords = None
     while run:
-        
-        redrawGameWindow(board)
+        clock.tick(30)
+        #redrawGameWindow(board, coords)
         #print(pygame.mouse.get_pressed()[0])
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                coords = pygame.mouse.get_pos()
+                print(board.turn)
+            else:
+                coords = None
 
-        
+        redrawGameWindow(board, coords)
+        coords = None
 
 main()
 pygame.quit()
