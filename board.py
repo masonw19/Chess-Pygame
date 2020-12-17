@@ -46,14 +46,14 @@ class Square:
     # when we click a square we need to highlight the clicked square and then get info on potential moves
     def highlight_clicked(self, board):
         self.win.blit(self.surface, (self.pos[0]+5,self.pos[1]+5))
-        
+
         # if the square we clicked is the same as the previous, just keep the square highglighted
         if self.pos == board.clickedSquares[board.turn].pos:
             board.pot_moves = self.show_moves(board.dict)
 
         # if the square we clicked is a potential move square, we need to update our clicked square and move our piece
-        elif self.pos in board.pot_moves:
-            self.update_board(board)
+        elif self.pos in board.pot_moves:                
+            self.update_board(board)    # update the board
             print(self.pos)
 
             self.release_highlight(board)   # release all old highlights
@@ -72,6 +72,10 @@ class Square:
 
     # update the clicked square and move piece
     def update_board(self, board):
+        # here we will check if the king or the rooks have moved. this is needed for castling functionality
+        if isinstance(board.clickedSquares[board.turn].piece, Rook) or isinstance(board.clickedSquares[board.turn].piece, King):
+            board.clickedSquares[board.turn].piece.has_moved = True
+
         self.piece = board.clickedSquares[board.turn].piece 
         self.isFull = True         # set that the square is now full
         self.clicked = False       # clicked is false
@@ -89,8 +93,9 @@ class Square:
             board.turn = BLACK
         else:
             board.turn = WHITE
-            
-        self.release_highlight(board)
+        
+        self.release_highlight(board)   # release the highlighted squares
+        board.pot_moves = []            # clear our potential moves
 
     def release_highlight(self, board):
         for move in board.pot_moves:

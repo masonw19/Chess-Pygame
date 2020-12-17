@@ -23,12 +23,11 @@ def redrawGameWindow(board, coords):
             if i.clicked:
                 i.highlight_clicked(board)  # highlights the clicked square
                 print("here")
-           
+                
         i.highlight()                   # highlights all the potential moves
         i.show()                        # shows all the images
-
+    
     pygame.display.update()
-
 
 def main():
     run = True

@@ -23,9 +23,7 @@ class Rook:
             self.col = col
             self.img = Rook_Black
 
-        self.surface = pygame.Surface((70,70))
-        self.surface.set_alpha(128)
-        self.surface.fill ((255,0,0))
+        self.has_moved = False
     
     def moves(self, pos, win, boardDict):
        
@@ -339,13 +337,15 @@ class King:
         else:
             self.col = col
             self.img = King_Black
+
+        self.has_moved = False
     
     def moves(self, pos, win, boardDict):
 
-        self.update_all_moves(pos)
+        self.update_all_moves(pos, boardDict)
 
         pot_moves = []
-        
+
         # loop for all potential moves
         for pos in self.all_moves:   
             if pos in boardDict:    # if the position is in our board dictionary, continue
@@ -359,10 +359,20 @@ class King:
 
         return pot_moves
 
-    def update_all_moves(self, pos):
+    def update_all_moves(self, pos, boardDict):
         self.all_moves = [(pos[0],pos[1]-80), (pos[0]+80,pos[1]-80), (pos[0]+80,pos[1]), 
                          (pos[0]+80,pos[1]+80), (pos[0],pos[1]+80), (pos[0]-80,pos[1]+80), 
                          (pos[0]-80,pos[1]), (pos[0]-80,pos[1]-80)]
+
+        # working on castling
+        if not self.has_moved:
+            if self.col == 0:
+                castle_moves = [(0, 560), (560, 560)]
+                for i in castle_moves:
+                    if boardDict[i].piece != None:
+                        if isinstance(boardDict[i].piece, Rook):
+                            if not boardDict[i].piece.has_moved:
+                                self.all_moves.append((160, 560))
 
 class Pawn:
     def __init__(self, col, pos):
