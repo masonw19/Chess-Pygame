@@ -21,8 +21,7 @@ def redrawGameWindow(board, coords):
         
             # highlight squares
             if i.clicked:
-                i.highlight_clicked(board)  # highlights the clicked square
-                print("here")
+                i.update_squares(board)  # highlights the clicked square
                 
         i.highlight()                   # highlights all the potential moves
         i.show()                        # shows all the images
@@ -35,7 +34,7 @@ def main():
     clock = pygame.time.Clock()
     coords = None
     while run:
-        #clock.tick(30)
+        # clock.tick(30)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

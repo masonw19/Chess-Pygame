@@ -44,7 +44,7 @@ class Square:
                 self.win.blit(self.surface, (board.dict[move].pos[0]+5, board.dict[move].pos[1]+5))
 
     # when we click a square we need to highlight the clicked square and then get info on potential moves
-    def highlight_clicked(self, board):
+    def update_squares(self, board):
         self.win.blit(self.surface, (self.pos[0]+5,self.pos[1]+5))
 
         # if the square we clicked is the same as the previous, just keep the square highglighted
@@ -69,12 +69,35 @@ class Square:
             board.clickedSquares[board.turn] = self
             board.clickedSquares[board.turn].clicked = True
             board.clickedSquares[board.turn].highlightme = True
+    
+    def check_castling(self, board):
+        if isinstance(board.clickedSquares[board.turn].piece, King):
+            if board.clickedSquares[board.turn].piece.col == 0:
+                if not board.clickedSquares[board.turn].piece.has_moved and (self.pos in board.clickedSquares[board.turn].piece.castle_moves_white):
+                    moveRook = board.dict[board.clickedSquares[board.turn].piece.castle_moves_white[self.pos][0]]
+                    moveRook.piece = board.dict[board.clickedSquares[board.turn].piece.castle_moves_white[self.pos][1]].piece
+                    moveRook.isFull = True
+
+                    board.dict[board.clickedSquares[board.turn].piece.castle_moves_white[self.pos][1]].piece = None
+                    board.dict[board.clickedSquares[board.turn].piece.castle_moves_white[self.pos][1]].isFull = False
+            else:
+                if not board.clickedSquares[board.turn].piece.has_moved and (self.pos in board.clickedSquares[board.turn].piece.castle_moves_black):
+                    moveRook = board.dict[board.clickedSquares[board.turn].piece.castle_moves_black[self.pos][0]]
+                    moveRook.piece = board.dict[board.clickedSquares[board.turn].piece.castle_moves_black[self.pos][1]].piece
+                    moveRook.isFull = True
+
+                    board.dict[board.clickedSquares[board.turn].piece.castle_moves_black[self.pos][1]].piece = None
+                    board.dict[board.clickedSquares[board.turn].piece.castle_moves_black[self.pos][1]].isFull = False
 
     # update the clicked square and move piece
     def update_board(self, board):
         # here we will check if the king or the rooks have moved. this is needed for castling functionality
+        
+        self.check_castling(board)
+        
         if isinstance(board.clickedSquares[board.turn].piece, Rook) or isinstance(board.clickedSquares[board.turn].piece, King):
             board.clickedSquares[board.turn].piece.has_moved = True
+
 
         self.piece = board.clickedSquares[board.turn].piece 
         self.isFull = True         # set that the square is now full
@@ -200,7 +223,6 @@ class Board:
                 self.G1, self.G2, self.G3, self.G4, self.G5, self.G6, self.G7, self.G8,
                 self.H1, self.H2, self.H3, self.H4, self.H5, self.H6, self.H7, self.H8]
         
-        self.clickedSquares = self.A1
         self.clickedSquares = [self.A1, self.A8]
         self.pot_moves = []
         self.turn = WHITE

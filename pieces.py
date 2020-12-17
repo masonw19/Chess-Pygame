@@ -339,6 +339,8 @@ class King:
             self.img = King_Black
 
         self.has_moved = False
+        self.castle_moves_white = {(160, 560):[(240, 560), (0, 560)], (480, 560):[(400, 560), (560, 560)]}
+        self.castle_moves_black = {(160, 0):[(240, 0), (0, 0)], (480, 0):[(400, 0), (560, 0)]}
     
     def moves(self, pos, win, boardDict):
 
@@ -364,7 +366,7 @@ class King:
                          (pos[0]+80,pos[1]+80), (pos[0],pos[1]+80), (pos[0]-80,pos[1]+80), 
                          (pos[0]-80,pos[1]), (pos[0]-80,pos[1]-80)]
 
-        # working on castling
+        # if king hasn't moved. see if we should add the castling moves
         if not self.has_moved:
             if self.col == 0:
                 castle_moves = [(0, 560), (560, 560)]
@@ -372,7 +374,20 @@ class King:
                     if boardDict[i].piece != None:
                         if isinstance(boardDict[i].piece, Rook):
                             if not boardDict[i].piece.has_moved:
-                                self.all_moves.append((160, 560))
+                                if (i == (0,560)) and (boardDict[(80,560)].piece == None) and (boardDict[(160, 560)].piece == None) and (boardDict[(240, 560)].piece == None):
+                                    self.all_moves.append((160, 560))
+                                elif (boardDict[(400,560)].piece == None) and (boardDict[(480, 560)].piece == None):
+                                    self.all_moves.append((480, 560))
+            else:
+                castle_moves = [(0, 0), (560, 0)]
+                for i in castle_moves:
+                    if boardDict[i].piece != None:
+                        if isinstance(boardDict[i].piece, Rook):
+                            if not boardDict[i].piece.has_moved:
+                                if (i == (0,0)) and (boardDict[(80,0)].piece == None) and (boardDict[(160, 0)].piece == None) and (boardDict[(240, 0)].piece == None):
+                                    self.all_moves.append((160, 0))
+                                elif (boardDict[(400,0)].piece == None) and (boardDict[(480, 0)].piece == None):
+                                    self.all_moves.append((480, 0))
 
 class Pawn:
     def __init__(self, col, pos):
