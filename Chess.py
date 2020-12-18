@@ -8,7 +8,6 @@ font = pygame.font.Font('freesansbold.ttf', 12)
 # write the title and load the bg image
 pygame.display.set_caption("Chess") 
 bg = pygame.image.load('imgs/Chess_Board.png')
-
 test_img = pygame.image.load('imgs/Queen_White.png')
 
 def redrawGameWindow(board, coords):
