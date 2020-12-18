@@ -376,7 +376,7 @@ class King:
                             if not boardDict[i].piece.has_moved:
                                 if (i == (0,560)) and (boardDict[(80,560)].piece == None) and (boardDict[(160, 560)].piece == None) and (boardDict[(240, 560)].piece == None):
                                     self.all_moves.append((160, 560))
-                                elif (boardDict[(400,560)].piece == None) and (boardDict[(480, 560)].piece == None):
+                                elif (i == (560,560)) and (boardDict[(400,560)].piece == None) and (boardDict[(480, 560)].piece == None):
                                     self.all_moves.append((480, 560))
             else:
                 castle_moves = [(0, 0), (560, 0)]
@@ -386,7 +386,7 @@ class King:
                             if not boardDict[i].piece.has_moved:
                                 if (i == (0,0)) and (boardDict[(80,0)].piece == None) and (boardDict[(160, 0)].piece == None) and (boardDict[(240, 0)].piece == None):
                                     self.all_moves.append((160, 0))
-                                elif (boardDict[(400,0)].piece == None) and (boardDict[(480, 0)].piece == None):
+                                elif (i == (0,560)) and (boardDict[(400,0)].piece == None) and (boardDict[(480, 0)].piece == None):
                                     self.all_moves.append((480, 0))
 
 class Pawn:
