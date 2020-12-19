@@ -6,43 +6,37 @@ from pieces import Rook, Knight, Bishop, Queen, King, Pawn
 WHITE = 0
 BLACK = 1
 pygame.init()
-chess_sound = mixer.Sound("sounds/chess_sound.wav")
+#chess_sound = mixer.Sound("sounds/chess_sound.wav")
 
 class Square:
 
-    def __init__(self, pos, piece, win, isIt):
+    def __init__(self, pos, piece, isIt):
         self.pos = pos
         self.piece = piece
         self.isFull = isIt
         self.clicked = False
         self.highlightme = False
-        self.win = win
 
         self.square = Rect(self.pos[0], self.pos[1], 80, 80)
-        self.surface = pygame.Surface((70,70))
-        self.surface.set_alpha(128)
-        self.surface.fill ((255,0,0))
 
     def show(self):
         if self.piece:
-            self.win.blit(self.piece.img, self.pos)
+            return [True, self.piece.img, self.pos]
+        return [False, None, self.pos]
 
     # turn on the highlightme of all potential spots and return a list of the potiential spots
     def show_moves(self, boardDict):
         if self.isFull:
-            return self.piece.moves(self.pos, self.win, boardDict)
+            return self.piece.moves(self.pos, boardDict)
         return []
 
     # highlight the square   
-    def highlight(self):
-        if self.highlightme:
-            self.win.blit(self.surface, (self.pos[0]+5,self.pos[1]+5))
-        if self.clicked:
-            self.win.blit(self.surface, (self.pos[0]+5,self.pos[1]+5))
+    def get_highlight(self):
+        return [self.highlightme, self.clicked, self.pos]
 
     # when we click a square we need to highlight the clicked square and then get info on potential moves
     def update_squares(self, board):
-        self.win.blit(self.surface, (self.pos[0]+5,self.pos[1]+5))
+        #win.blit(surface, (self.pos[0]+5,self.pos[1]+5))
 
         # if the square we clicked is the same as the previous, just keep the square highglighted
         if self.pos == board.clickedSquares[board.turn].pos:
@@ -89,7 +83,7 @@ class Square:
     # update the clicked square and move piece
     def update_board(self, board):
         # here we will check if the king or the rooks have moved. this is needed for castling functionality
-        chess_sound.play()
+        #chess_sound.play()
         self.check_castling(board)
         
         if isinstance(board.clickedSquares[board.turn].piece, Rook) or isinstance(board.clickedSquares[board.turn].piece, King):
@@ -130,76 +124,77 @@ class Square:
 
 class Board:
 
-    def __init__(self, win):
-        self.A1 = Square((0,560), Rook(WHITE), win, True)
-        self.B1 = Square((80,560), Knight(WHITE), win, True)
-        self.C1 = Square((160,560), Bishop(WHITE), win, True)
-        self.D1 = Square((240,560), Queen(WHITE), win, True) 
-        self.E1 = Square((320,560), King(WHITE), win, True)
-        self.F1 = Square((400,560), Bishop(WHITE), win, True)
-        self.G1 = Square((480,560), Knight(WHITE), win, True)
-        self.H1 = Square((560,560), Rook(WHITE), win, True)
-        self.A2 = Square((0,480), Pawn(WHITE,(0,480)), win, True)
-        self.B2 = Square((80,480), Pawn(WHITE,(80,480)), win, True)
-        self.C2 = Square((160,480), Pawn(WHITE,(160,480)), win, True)
-        self.D2 = Square((240,480), Pawn(WHITE,(240,480)), win, True)
-        self.E2 = Square((320,480), Pawn(WHITE,(320,480)), win, True)
-        self.F2 = Square((400,480), Pawn(WHITE,(400,480)), win, True)
-        self.G2 = Square((480,480), Pawn(WHITE,(480,480)), win, True)
-        self.H2 = Square((560,480), Pawn(WHITE,(560,480)), win, True)
+    def __init__(self):
 
-        self.A8 = Square((0,0), Rook(BLACK), win, True)
-        self.B8 = Square((80,0), Knight(BLACK), win, True)
-        self.C8 = Square((160,0), Bishop(BLACK), win, True)
-        self.D8 = Square((240,0), Queen(BLACK), win, True)
-        self.E8 = Square((320,0), King(BLACK), win, True)
-        self.F8 = Square((400,0), Bishop(BLACK), win, True)
-        self.G8 = Square((480,0), Knight(BLACK), win, True)
-        self.H8 = Square((560,0), Rook(BLACK), win, True)
-        self.A7 = Square((0,80), Pawn(BLACK,(0,80)), win, True)
-        self.B7 = Square((80,80), Pawn(BLACK,(80,80)), win, True)
-        self.C7 = Square((160,80), Pawn(BLACK,(160,80)), win, True)
-        self.D7 = Square((240,80), Pawn(BLACK,(240,80)), win, True)
-        self.E7 = Square((320,80), Pawn(BLACK,(320,80)), win, True)
-        self.F7 = Square((400,80), Pawn(BLACK,(400,80)), win, True)
-        self.G7 = Square((480,80), Pawn(BLACK,(480,80)), win, True)
-        self.H7 = Square((560,80), Pawn(BLACK,(560,80)), win, True)
+        self.A1 = Square((0,560), Rook(WHITE), True)
+        self.B1 = Square((80,560), Knight(WHITE), True)
+        self.C1 = Square((160,560), Bishop(WHITE), True)
+        self.D1 = Square((240,560), Queen(WHITE), True) 
+        self.E1 = Square((320,560), King(WHITE), True)
+        self.F1 = Square((400,560), Bishop(WHITE), True)
+        self.G1 = Square((480,560), Knight(WHITE), True)
+        self.H1 = Square((560,560), Rook(WHITE), True)
+        self.A2 = Square((0,480), Pawn(WHITE,(0,480)), True)
+        self.B2 = Square((80,480), Pawn(WHITE,(80,480)), True)
+        self.C2 = Square((160,480), Pawn(WHITE,(160,480)), True)
+        self.D2 = Square((240,480), Pawn(WHITE,(240,480)), True)
+        self.E2 = Square((320,480), Pawn(WHITE,(320,480)), True)
+        self.F2 = Square((400,480), Pawn(WHITE,(400,480)), True)
+        self.G2 = Square((480,480), Pawn(WHITE,(480,480)), True)
+        self.H2 = Square((560,480), Pawn(WHITE,(560,480)), True)
 
-        self.A3 = Square((0,400), None, win, False)
-        self.B3 = Square((80, 400), None, win, False)
-        self.C3 = Square((160, 400), None, win, False)
-        self.D3 = Square((240, 400), None, win, False)
-        self.E3 = Square((320, 400), None, win, False)
-        self.F3 = Square((400, 400), None, win, False)
-        self.G3 = Square((480, 400), None, win, False)
-        self.H3 = Square((560, 400), None, win, False)
+        self.A8 = Square((0,0), Rook(BLACK), True)
+        self.B8 = Square((80,0), Knight(BLACK), True)
+        self.C8 = Square((160,0), Bishop(BLACK), True)
+        self.D8 = Square((240,0), Queen(BLACK), True)
+        self.E8 = Square((320,0), King(BLACK), True)
+        self.F8 = Square((400,0), Bishop(BLACK), True)
+        self.G8 = Square((480,0), Knight(BLACK), True)
+        self.H8 = Square((560,0), Rook(BLACK), True)
+        self.A7 = Square((0,80), Pawn(BLACK,(0,80)), True)
+        self.B7 = Square((80,80), Pawn(BLACK,(80,80)), True)
+        self.C7 = Square((160,80), Pawn(BLACK,(160,80)), True)
+        self.D7 = Square((240,80), Pawn(BLACK,(240,80)), True)
+        self.E7 = Square((320,80), Pawn(BLACK,(320,80)), True)
+        self.F7 = Square((400,80), Pawn(BLACK,(400,80)), True)
+        self.G7 = Square((480,80), Pawn(BLACK,(480,80)), True)
+        self.H7 = Square((560,80), Pawn(BLACK,(560,80)), True)
 
-        self.A4 = Square((0,320), None, win, False)
-        self.B4 = Square((80, 320), None, win, False)
-        self.C4 = Square((160, 320), None, win, False)
-        self.D4 = Square((240, 320), None, win, False)
-        self.E4 = Square((320, 320), None, win, False)
-        self.F4 = Square((400, 320), None, win, False)
-        self.G4 = Square((480, 320), None, win, False)
-        self.H4 = Square((560, 320), None, win, False)
+        self.A3 = Square((0,400), None, False)
+        self.B3 = Square((80, 400), None, False)
+        self.C3 = Square((160, 400), None, False)
+        self.D3 = Square((240, 400), None, False)
+        self.E3 = Square((320, 400), None, False)
+        self.F3 = Square((400, 400), None, False)
+        self.G3 = Square((480, 400), None, False)
+        self.H3 = Square((560, 400), None, False)
 
-        self.A5 = Square((0,240), None, win, False)
-        self.B5 = Square((80, 240), None, win, False)
-        self.C5 = Square((160, 240), None, win, False)
-        self.D5 = Square((240, 240), None, win, False)
-        self.E5 = Square((320, 240), None, win, False)
-        self.F5 = Square((400, 240), None, win, False)
-        self.G5 = Square((480, 240), None, win, False)
-        self.H5 = Square((560, 240), None, win, False)
+        self.A4 = Square((0,320), None, False)
+        self.B4 = Square((80, 320), None, False)
+        self.C4 = Square((160, 320), None, False)
+        self.D4 = Square((240, 320), None, False)
+        self.E4 = Square((320, 320), None, False)
+        self.F4 = Square((400, 320), None, False)
+        self.G4 = Square((480, 320), None, False)
+        self.H4 = Square((560, 320), None, False)
 
-        self.A6 = Square((0,160), None, win, False)
-        self.B6 = Square((80, 160), None, win, False)
-        self.C6 = Square((160, 160), None, win, False)
-        self.D6 = Square((240, 160), None, win, False)
-        self.E6 = Square((320, 160), None, win, False)
-        self.F6 = Square((400, 160), None, win, False)
-        self.G6 = Square((480, 160), None, win, False)
-        self.H6 = Square((560, 160), None, win, False)
+        self.A5 = Square((0,240), None, False)
+        self.B5 = Square((80, 240), None, False)
+        self.C5 = Square((160, 240), None, False)
+        self.D5 = Square((240, 240), None, False)
+        self.E5 = Square((320, 240), None, False)
+        self.F5 = Square((400, 240), None, False)
+        self.G5 = Square((480, 240), None, False)
+        self.H5 = Square((560, 240), None, False)
+
+        self.A6 = Square((0,160), None, False)
+        self.B6 = Square((80, 160), None, False)
+        self.C6 = Square((160, 160), None, False)
+        self.D6 = Square((240, 160), None, False)
+        self.E6 = Square((320, 160), None, False)
+        self.F6 = Square((400, 160), None, False)
+        self.G6 = Square((480, 160), None, False)
+        self.H6 = Square((560, 160), None, False)
 
         self.dict = {(0,560):self.A1, (0,480):self.A2, (0,400):self.A3, (0,320):self.A4, (0,240):self.A5, (0,160):self.A6, (0,80):self.A7, (0,0):self.A8,
                 (80,560):self.B1, (80,480):self.B2, (80,400):self.B3, (80,320):self.B4, (80,240):self.B5, (80,160):self.B6, (80,80):self.B7, (80,0):self.B8,
@@ -223,7 +218,8 @@ class Board:
         self.clickedSquares = [self.A1, self.A8]
         self.pot_moves = []
         self.turn = WHITE
-        self.win = win
+
+        self.disc = False   # TESTING
 
     def getList(self):
         return self.list

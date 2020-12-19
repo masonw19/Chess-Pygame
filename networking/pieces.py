@@ -1,18 +1,19 @@
 import pygame
 
-Rook_White = pygame.image.load("imgs/Rook_White.png")
-Knight_White = pygame.image.load("imgs/Knight_White.png")
-Bishop_White = pygame.image.load("imgs/Bishop_White.png")
-Queen_White = pygame.image.load("imgs/Queen_White.png")
-King_White = pygame.image.load("imgs/King_White.png")
-Pawn_White = pygame.image.load("imgs/Pawn_White.png")
+# these are all pygame surfaces. SMH
+Rook_White = "Rook_White"
+Knight_White = "Knight_White"
+Bishop_White = "Bishop_White"
+Queen_White = "Queen_White"
+King_White = "King_White"
+Pawn_White = "Pawn_White"
 
-Rook_Black = pygame.image.load("imgs/Rook_Black.png")
-Knight_Black = pygame.image.load("imgs/Knight_Black.png")
-Bishop_Black = pygame.image.load("imgs/Bishop_Black.png")
-Queen_Black = pygame.image.load("imgs/Queen_Black.png")
-King_Black = pygame.image.load("imgs/King_Black.png")
-Pawn_Black = pygame.image.load("imgs/Pawn_Black.png")
+Rook_Black ="Rook_Black"
+Knight_Black = "Knight_Black"
+Bishop_Black = "Bishop_Black"
+Queen_Black = "Queen_Black"
+King_Black = "King_Black"
+Pawn_Black = "Pawn_Black"
 
 class Rook:
     def __init__(self, col):
@@ -25,7 +26,7 @@ class Rook:
 
         self.has_moved = False
     
-    def moves(self, pos, win, boardDict):
+    def moves(self, pos, boardDict):
        
         self.update_all_moves(pos, boardDict)
 
@@ -104,7 +105,7 @@ class Knight:
             self.col = col
             self.img = Knight_Black
     
-    def moves(self, pos, win, boardDict):
+    def moves(self, pos, boardDict):
         
         self.update_all_moves(pos)
         
@@ -136,7 +137,7 @@ class Bishop:
             self.col = col
             self.img = Bishop_Black
     
-    def moves(self, pos, win, boardDict):
+    def moves(self, pos, boardDict):
         self.update_all_moves(pos, boardDict)
         
         pot_moves = []
@@ -212,12 +213,8 @@ class Queen:
         else:
             self.col = col
             self.img = Queen_Black
-
-        self.surface = pygame.Surface((70,70))
-        self.surface.set_alpha(128)
-        self.surface.fill ((255,0,0))
     
-    def moves(self, pos, win, boardDict):
+    def moves(self, pos, boardDict):
         self.update_all_moves(pos, boardDict)
         
         pot_moves = []
@@ -342,7 +339,7 @@ class King:
         self.castle_moves_white = {(160, 560):[(240, 560), (0, 560)], (480, 560):[(400, 560), (560, 560)]}
         self.castle_moves_black = {(160, 0):[(240, 0), (0, 0)], (480, 0):[(400, 0), (560, 0)]}
     
-    def moves(self, pos, win, boardDict):
+    def moves(self, pos, boardDict):
 
         self.update_all_moves(pos, boardDict)
 
@@ -387,7 +384,7 @@ class King:
                                 if (i == (0,0)) and (boardDict[(80,0)].piece == None) and (boardDict[(160, 0)].piece == None) and (boardDict[(240, 0)].piece == None):
                                     self.all_moves.append((160, 0))
                                 elif (i == (560,0)) and (boardDict[(400,0)].piece == None) and (boardDict[(480, 0)].piece == None):
-                                    self.all_moves.append((480, 0))
+                                    self.all_moves.append((480, 0))        
 
 class Pawn:
     def __init__(self, col, pos):
@@ -400,7 +397,7 @@ class Pawn:
 
         self.init_pos = pos     # need this because first move can move forward 2 spaces
     
-    def moves(self, pos, win, boardDict):
+    def moves(self, pos, boardDict):
         
         self.update_all_moves(pos, boardDict)
 
