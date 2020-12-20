@@ -15,7 +15,7 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # this creates our so
 server.bind(ADDR)   # bound the socket to this address. whenever a client connects to the address it will hit our socket
 
 #window = [pygame.display.set_mode((640, 640)), pygame.display.set_mode((640, 640))] # game windows
-board = [Board(), Board()]    # game boards
+board = [Board(True), Board(False)]    # game boards
 
 # acknowledgment protocol
 def ack(conn, addr, s):
@@ -40,13 +40,12 @@ def handle_client(conn, addr, connection_num):
         
         if data_length:  # we need to check if the message we are receiving is the buffer message that is first sent on connection
             data = pickle.loads(conn.recv(int(data_length))) # this line waits until we receive a message from the client
-            #board[connection_num] = data
 
             if connection_num == 0:
                 board[1] = data
             else:
                 board[0] = data
-
+                
             if data.disc:   # if the client has disconnected we have to do this to safely close connection
                 connected = False   # leave the while loop
                 board[connection_num].disc = False    # change the disc variable to be back to false for if the the user reconnects

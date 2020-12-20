@@ -40,5 +40,6 @@ class Network:
             self.client.send(data)    # send objects
 
             return self.ack()
+
         except socket.error as e:
             print(e)

@@ -35,7 +35,6 @@ def show_pieces(valid ,img, pos, win):
 
 def redrawGameWindow(board, n, coords, win, surface):
     win.blit(bg, (0, 0))
-    update = False
 
     for i in board.list:
         
@@ -44,33 +43,41 @@ def redrawGameWindow(board, n, coords, win, surface):
         
             # highlight squares
             if i.clicked:
-                i.update_squares(board)  # highlights the clicked square
-                update = True
-                
-                
+                i.update_squares(board, n)  # highlights the clicked square
 
         # highlight the squares
         highlightme, clicked, pos = i.get_highlight()            # highlights all the potential moves
         highlight(highlightme, clicked, pos, win)
     
         # show the pieces
-        data = i.show()                        # shows all the images
-        show_pieces(data[0], data[1], data[2], win)
-        
-    
-    pygame.display.update()
+        valid,img, pos = i.show()                        # shows all the images
+        show_pieces(valid, img, pos, win)
 
+    if board.my_turn == False:
+        win.blit(bg, (0, 0))
+        for i in board.list:
+            # highlight the squares
+            highlightme, clicked, pos = i.get_highlight()            # highlights all the potential moves
+            highlight(highlightme, clicked, pos, win)
+        
+            # show the pieces
+            valid, img, pos = i.show()                        # shows all the images
+            show_pieces(valid, img, pos, win)  
+
+    pygame.display.update()
 
 def main():
     run = True
     n = Network()
     board1 = n.getBoard()
-    clock = pygame.time.Clock()
+    #clock = pygame.time.Clock()
     coords = None
+    redrawGameWindow(board1, n, coords, win, surface) # we might want to send board2.win
     while run:
         # clock.tick(30)
         
-        board1 = n.send(board1) # when we send data through the network we will receive the other boards information
+        #board1 = n.send(board1) # when we send data through the network we will receive the other boards information
+        
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -81,9 +88,13 @@ def main():
             else:
                 coords = None
 
-        redrawGameWindow(board1, n, coords, win, surface) # we might want to send board2.win
-        coords = None
+        if board1.my_turn:
+            redrawGameWindow(board1, n, coords, win, surface) # we might want to send board2.win
+        else:
+            board1 = n.send(board1)
 
+        coords = None
+        #print(board1.my_turn)
 main()
 pygame.quit()
 
