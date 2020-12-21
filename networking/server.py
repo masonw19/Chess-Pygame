@@ -25,6 +25,7 @@ def ack(conn, addr, s):
     data_length += b' ' * (HEADER - len(data_length)) # add padding so that our message we send is 64 bytes
     conn.send(data_length)
     conn.send(data)
+    #print(len(data))
 
 def handle_client(conn, addr, connection_num):
     global threadCount
@@ -37,10 +38,9 @@ def handle_client(conn, addr, connection_num):
     connected = True
     while connected:
         data_length = conn.recv(HEADER).decode(FORMAT)   # get how many bytes the message we receive will be. this line waits until we receive message from client
-        
+        # print(data_length)
         if data_length:  # we need to check if the message we are receiving is the buffer message that is first sent on connection
             data = pickle.loads(conn.recv(int(data_length))) # this line waits until we receive a message from the client
-
             if connection_num == 0:
                 board[1] = data
             else:

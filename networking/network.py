@@ -4,7 +4,7 @@ import pickle
 # when we make a network class instance we connect to the server
 class Network:
     def __init__(self):
-        self.server = socket.gethostbyname(socket.gethostname())    # this will get our local ip address
+        self.server = "192.168.0.61"#socket.gethostbyname(socket.gethostname())    # this will get our local ip address
         self.client = self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)   # this will create our socket connection
         self.port = 5050    # server port
         self.addr = (self.server, self.port)    # address we will bind our socket to
