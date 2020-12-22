@@ -20,10 +20,11 @@ board = [Board(True), Board(False)]    # game boards
 # acknowledgment protocol
 def ack(conn, addr, s):
     data = s
-    data_length = len(data)
-    data_length = str(data_length).encode(FORMAT) # we have to encode our string into the byte format to send to the server
-    data_length += b' ' * (HEADER - len(data_length)) # add padding so that our message we send is 64 bytes
-    conn.send(data_length)
+    #data_length = len(data)
+    #print(data_length)
+    #data_length = str(data_length).encode(FORMAT) # we have to encode our string into the byte format to send to the server
+    #data_length += b' ' * (HEADER - len(data_length)) # add padding so that our message we send is 64 bytes
+    #conn.send(data_length)
     conn.send(data)
     #print(len(data))
 
@@ -37,30 +38,40 @@ def handle_client(conn, addr, connection_num):
 
     connected = True
     while connected:
-        data_length = conn.recv(HEADER).decode(FORMAT)   # get how many bytes the message we receive will be. this line waits until we receive message from client
+        #data_length = conn.recv(HEADER).decode(FORMAT)   # get how many bytes the message we receive will be. this line waits until we receive message from client
         # print(data_length)
-        if data_length:  # we need to check if the message we are receiving is the buffer message that is first sent on connection
-            data = pickle.loads(conn.recv(int(data_length))) # this line waits until we receive a message from the client
-            if connection_num == 0:
-                board[1] = data
+        #if data_length:  # we need to check if the message we are receiving is the buffer message that is first sent on connection
+            data = conn.recv(int(4096*3)) # this line waits until we receive a message from the client
+            if not data:
+                pass
             else:
-                board[0] = data
-                
-            if data.disc:   # if the client has disconnected we have to do this to safely close connection
-                connected = False   # leave the while loop
-                board[connection_num].disc = False    # change the disc variable to be back to false for if the the user reconnects
-                print("[DISCONNECTED]", addr)   # print message to screen
-                if board == 0:                 # if the player to disconnect was player 0 we need to keep track of the thread
-                    threadCount = 0
-                if board == 1:                 # if the player to disconnect was player 1 we need to keep track of the thread
-                    threadCount = 1
-            else:
-                if connection_num == 0:     # if player 1 sends us the data, we reply with player 0's data
-                    reply = board[0]
-                else:               # if player 0 sends us the data, we reply with player 1's data
-                    reply = board[1]
-                ack(conn, addr, pickle.dumps(reply))
+                data = pickle.loads(data) # this line waits until we receive a message from the client
 
+                #data = []
+                #while True:
+                #    pickle_data = conn.recv(4096)
+                #    if not pickle_data: break
+                #    data.append(pickle_data)
+                #data = pickle.loads(b"".join(data))
+                if connection_num == 0:
+                    board[1] = data
+                else:
+                    board[0] = data
+                    
+                if data.disc:   # if the client has disconnected we have to do this to safely close connection
+                    connected = False   # leave the while loop
+                    board[connection_num].disc = False    # change the disc variable to be back to false for if the the user reconnects
+                    print("[DISCONNECTED]", addr)   # print message to screen
+                    if board == 0:                 # if the player to disconnect was player 0 we need to keep track of the thread
+                        threadCount = 0
+                    if board == 1:                 # if the player to disconnect was player 1 we need to keep track of the thread
+                        threadCount = 1
+                else:
+                    if connection_num == 0:     # if player 1 sends us the data, we reply with player 0's data
+                        reply = board[0]
+                    else:               # if player 0 sends us the data, we reply with player 1's data
+                        reply = board[1]
+                    ack(conn, addr, pickle.dumps(reply))
     conn.close()    # this will close our connection with the client safely
 
 def start():

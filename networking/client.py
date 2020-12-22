@@ -72,11 +72,11 @@ def main():
     run = True
     n = Network()
     board1 = n.getBoard()
-    #clock = pygame.time.Clock()
+    clock = pygame.time.Clock()
     coords = None
     redrawGameWindow(board1, n, coords, win, surface) # we might want to send board2.win
     while run:
-        #clock.tick(30)
+        clock.tick(30)
         
         #board1 = n.send(board1) # when we send data through the network we will receive the other boards information
         
@@ -94,10 +94,13 @@ def main():
             data = pickle.dumps(board1)   # object we want to send to other client
             print(len(data))     # length of data
         else:
+            #board1 = n.getBoard()
             board1 = n.send(board1)
+            pass
+
 
         coords = None
-        #print(board1.my_turn)
+        print(board1.my_turn)
 main()
 pygame.quit()
 
