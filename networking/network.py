@@ -14,20 +14,11 @@ class Network:
     
     # acknowledgment protocol. receive data from the server. this method will wait for a response
     def ack(self):
-        #data_length = self.client.recv(self.header).decode(self.format) # get the size of the message we are receiving
-        #if data_length:
         data = self.client.recv(int(4096*3))
-        if not data:
+        if not data:        # check if we have received any data before unpickling
             return None
         else:
             return pickle.loads(data)    # receive an object and return it
-        #data = []
-        #while True:
-        #    pickle_data = self.client.recv(4096)
-        #    if not pickle_data: break
-        #    data.append(pickle_data)
-        #data = pickle.loads(b"".join(data))
-        #return data
 
     def getBoard(self):
         return self.receive_object  # return the players board
@@ -44,10 +35,6 @@ class Network:
     def send(self, data):
         try:
             data = pickle.dumps(data)   # object we want to send to other client
-            data_length = len(data)     # length of data
-            data_length = str(data_length).encode(self.format)  # get the length of data
-            data_length += b' ' * (self.header - len(data_length))  # fill out length to 64 bytes   
-            #self.client.send(data_length)   # send length
             self.client.send(data)    # send objects
 
             return self.ack()

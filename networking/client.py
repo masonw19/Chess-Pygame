@@ -1,4 +1,5 @@
 import pygame
+#from pygame import mixer
 from board import Board
 from network import Network
 import pickle
@@ -12,6 +13,7 @@ pygame.display.set_caption("Chess")
 bg = pygame.image.load('imgs/Chess_Board.png')
 icon = pygame.image.load('imgs/Queen_White.png')
 pygame.display.set_icon(icon)
+#chess_sound = mixer.Sound("sounds/chess_sound.wav")
 
 surface = pygame.Surface((70,70))
 surface.set_alpha(128)
@@ -57,6 +59,7 @@ def redrawGameWindow(board, n, coords, win, surface):
 
     if board.my_turn == False:
         win.blit(bg, (0, 0))
+        #chess_sound.play()
         for i in board.list:
             # highlight the squares
             highlightme, clicked, pos = i.get_highlight()            # highlights all the potential moves
@@ -78,26 +81,23 @@ def main():
     while run:
         clock.tick(30)
         
-        #board1 = n.send(board1) # when we send data through the network we will receive the other boards information
-        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 coords = pygame.mouse.get_pos()
-                print(board1.turn)
+                #print(board1.turn)
             else:
                 coords = None
 
         if board1.my_turn:
             redrawGameWindow(board1, n, coords, win, surface) # we might want to send board2.win
             data = pickle.dumps(board1)   # object we want to send to other client
-            print(len(data))     # length of data
+            #print(len(data))     # length of data
         else:
-            #board1 = n.getBoard()
             board1 = n.send(board1)
-            pass
-
+            while board1 == None:
+                board1 = n.send(board1)
 
         coords = None
         print(board1.my_turn)

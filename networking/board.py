@@ -1,12 +1,10 @@
 import pygame
-from pygame import mixer
 from pygame.locals import Rect
 from pieces import Rook, Knight, Bishop, Queen, King, Pawn
 
 WHITE = 0
 BLACK = 1
 pygame.init()
-#chess_sound = mixer.Sound("sounds/chess_sound.wav")
 
 class Square:
 
@@ -83,7 +81,6 @@ class Square:
     # update the clicked square and move piece
     def update_board(self, board, n):
         # here we will check if the king or the rooks have moved. this is needed for castling functionality
-        #chess_sound.play()
         self.check_castling(board)
         
         if isinstance(board.clickedSquares[board.turn].piece, Rook) or isinstance(board.clickedSquares[board.turn].piece, King):
@@ -210,7 +207,6 @@ class Board:
                 (480,560):self.G1, (480,480):self.G2, (480,400):self.G3, (480,320):self.G4, (480,240):self.G5, (480,160):self.G6, (480,80):self.G7, (480,0):self.G8,
                 (560,560):self.H1, (560,480):self.H2, (560,400):self.H3, (560,320):self.H4, (560,240):self.H5, (560,160):self.H6, (560,80):self.H7, (560,0):self.H8}
     
-        # we are probably gonna not need this
         self.list = [self.A1, self.A2, self.A3, self.A4, self.A5, self.A6, self.A7, self.A8,
                 self.B1, self.B2, self.B3, self.B4, self.B5, self.B6, self.B7, self.B8,
                 self.C1, self.C2, self.C3, self.C4, self.C5, self.C6, self.C7, self.C8,
