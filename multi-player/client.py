@@ -11,7 +11,7 @@ font = pygame.font.Font('freesansbold.ttf', 12)
 # write the title and load the bg image
 pygame.display.set_caption("Chess") 
 bg = pygame.image.load('imgs/Chess_Board.png')
-icon = pygame.image.load('imgs/Queen_White.png')
+icon = pygame.image.load('imgs/King_White.png')
 pygame.display.set_icon(icon)
 #chess_sound = mixer.Sound("sounds/chess_sound.wav")
 
