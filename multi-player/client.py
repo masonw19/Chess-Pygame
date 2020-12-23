@@ -100,7 +100,10 @@ def main():
                 board1 = n.send(board1)
 
         coords = None
-        print(board1.my_turn)
+        if board1.my_turn:
+            print("Your Move")
+        else:
+            print("Opponents Move")
 main()
 pygame.quit()
 
