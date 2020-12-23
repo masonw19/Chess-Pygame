@@ -4,12 +4,10 @@ import pickle
 # when we make a network class instance we connect to the server
 class Network:
     def __init__(self):
-        self.server = "192.168.0.61"#socket.gethostbyname(socket.gethostname())    # this will get our local ip address
+        self.server = "localhost" # IPv4 address goes here. To find IPv4 address go to command prompt and enter 'ipconfig/all'
         self.client = self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)   # this will create our socket connection
         self.port = 5050    # server port
         self.addr = (self.server, self.port)    # address we will bind our socket to
-        self.header = 64
-        self.format = 'utf-8'   # format to decode bytes to strings
         self.receive_object = self.connect()
     
     # acknowledgment protocol. receive data from the server. this method will wait for a response

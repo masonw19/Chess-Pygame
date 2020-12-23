@@ -5,10 +5,8 @@ import pickle # this is used for object transfer
 from board import Board
 
 PORT = 5050
-SERVER = socket.gethostbyname(socket.gethostname()) # this will get my local IP address
+SERVER = "localhost" # IPv4 address goes here. To find IPv4 address go to command prompt and enter 'ipconfig/all'
 ADDR = (SERVER, PORT) # address we will bind our socket to
-HEADER = 64 # this will be the first message received from the client that will tell us how big our message is
-FORMAT = 'utf-8' # we will decode our received messages from byte form to a string with this format
 DISC_MSG = "!DISCONNECT" # disconnect message we can receive from the client
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # this creates our socket connection. we are using an internet connection, streaming data
