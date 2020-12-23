@@ -18,7 +18,8 @@ This project is a chess game that supports online multiplayer games as well as o
 3. Clone this repository to a local directory or download it as a zip and unzip it.
 4. For the multi-player game open the command prompt and _cd_ to the _multi-player_ folder.
 5. You will have to change the server address in the `server.py` and `network.py` files to the IPv4 address of the machine you will run the server script on.
-6. Now you will run the `server.py` file and two instances of the `client.py` file to play online chess.
+6. You can now run an instance of the `server.py` file on a machine.
+7. Copy the _multi-player_ folder on to two machines and run an instnace of the `client.py` file on both machines to play online chess.
 
 ## Gameplay
 This is a short demonstration of how a single-player chess game looks.
