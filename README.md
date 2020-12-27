@@ -26,4 +26,4 @@ This is a short demonstration of how a single-player chess game looks.
 
 ![gameplay2 demo](screenshots/gameplay2.gif)
 
-![multi-player demo](screenshots/multi-player.gif)
+![multi-player demo](screenshots/multi-player2.gif)
