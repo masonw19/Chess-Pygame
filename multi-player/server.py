@@ -49,9 +49,9 @@ def handle_client(conn, addr, connection_num):
                 if board == 1:                 # if the player to disconnect was player 1 we need to keep track of the thread
                     threadCount = 1
             else:
-                if connection_num == 0:     # if player 1 sends us the data, we reply with player 0's data
+                if connection_num == 0:     # if player 0 sends us the data, we reply with player 0's data
                     reply = board[0]
-                else:               # if player 0 sends us the data, we reply with player 1's data
+                else:               # if player 1 sends us the data, we reply with player 1's data
                     reply = board[1]
                 ack(conn, addr, pickle.dumps(reply))
     conn.close()    # this will close our connection with the client safely

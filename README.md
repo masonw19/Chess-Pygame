@@ -26,4 +26,6 @@ This is a short demonstration of how a single-player chess game looks.
 
 ![gameplay2 demo](screenshots/gameplay2.gif)
 
+In this demonstration I am running two clients on the same machine to play a multi-player chess game.
+
 ![multi-player demo](screenshots/multi-player2.gif)
